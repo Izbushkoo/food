@@ -1,10 +1,12 @@
 window.addEventListener('DOMContentLoaded', () => {
 
+    // Tabs
+
     const tabs = document.querySelectorAll('.tabheader__item'),
           tabsConents = document.querySelectorAll('.tabcontent'),
           tabsParent = document.querySelector('.tabheader__items');
     
-    function hideTabsContent(){
+    function hideTabsContent() {
         tabsConents.forEach(item => {
             item.classList.add('hide');
             item.classList.remove('show', 'fade');
@@ -37,4 +39,49 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Timer
+
+    const deadline = '2022-12-12';
+
+    function getTimeRest(endtime) {
+        const total = Date.parse(endtime) - Date.parse(new Date()),
+              days = Math.floor(total / (1000 * 60 * 60 * 24)),
+              hours = Math.floor((total / (1000 * 60 * 60)) % 24),
+              minutes = Math.floor((total / 1000 / 60) % 60),
+              seconds = Math.floor((total / 1000) % 60);
+
+        return {
+            'total': total,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    }
+    
+    function setClock(selector, endtime){
+        
+        const timer = document.querySelector(selector),
+              days = timer.querySelector('#days'),
+              hours = timer.querySelector('#hours'),
+              minutes = timer.querySelector('#minutes'),
+              seconds = timer.querySelector('#seconds'),
+              timeInterval = setInterval(updateTimerClock, 1000);
+        
+              updateTimerClock();
+
+        function updateTimerClock() {
+            const t = getTimeRest(endtime);
+
+            days.innerHTML = t.days;
+            hours.innerHTML = t.hours;
+            minutes.innerHTML = t.minutes;
+            seconds.innerHTML = t.seconds; 
+            console.log(days.innerHTMl);
+        }
+        
+    }
+
+    setClock('.timer', deadline);
 });
