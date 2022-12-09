@@ -60,6 +60,15 @@ window.addEventListener('DOMContentLoaded', () => {
         };
     }
     
+    function addZero(number){
+        if (number > 0 && number < 10) {
+            return `0${number}`;
+            
+        } else {
+            return number;
+        }
+    }
+
     function setClock(selector, endtime){
         
         const timer = document.querySelector(selector),
@@ -74,11 +83,14 @@ window.addEventListener('DOMContentLoaded', () => {
         function updateTimerClock() {
             const t = getTimeRest(endtime);
 
-            days.innerHTML = t.days;
-            hours.innerHTML = t.hours;
-            minutes.innerHTML = t.minutes;
-            seconds.innerHTML = t.seconds; 
-            console.log(days.innerHTMl);
+            days.innerHTML = addZero(t.days);
+            hours.innerHTML = addZero(t.hours);
+            minutes.innerHTML = addZero(t.minutes);
+            seconds.innerHTML = addZero(t.seconds); 
+
+            if (t.total <= 0){
+                clearInterval(timeInterval);
+            }
         }
         
     }
