@@ -193,16 +193,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const getResourse = async (url) => {
         const res = await fetch(url);
-        console.log(res);
         if (!res.ok) {
             throw new Error(`could not fetch ${url}, status: ${res.status}`);
         }
         return await res.json();
     };
     
-    getResourse('http://localhost:3000/menu')
+    // getResourse('http://localhost:3000/menu')
+    //     .then(data => {
+    //         createCard(data);
+    //     });
+
+    axios.get('http://localhost:3000/menu')
         .then(data => {
-            createCard(data);
+            data.data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuItem(img, altimg, title, descr, price, '.menu .container').render();
+            });
         });
     
     function convertToUAH(price, current){
