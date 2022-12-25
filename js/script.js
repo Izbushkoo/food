@@ -323,10 +323,72 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-    // const ob = [{a: 1}, {a: 2}, {a: 4}];
-    // ob.forEach(({a}) => {
-    //     console.log(a);
-    // });
+    // Slider
+
+    const offerSlider = document.querySelector('.offer__slider'),
+          offerSlides = offerSlider.querySelectorAll('.offer__slide'),
+          sliderPrev = offerSlider.querySelector('.offer__slider-prev'),
+          sliderNext = offerSlider.querySelector('.offer__slider-next'),
+          current = document.getElementById('current'),
+          total = document.getElementById('total'),
+          totalNumber = offerSlides.length;
     
-        
+    let currentNum = 1;
+
+    function formCounter(currNum) {
+
+        function checkNumber(num) {
+            if (num < 10) {
+                return `0${num}`;
+            } else {return num;}
+        }
+
+        total.innerHTML = checkNumber(offerSlides.length);
+        current.innerHTML = checkNumber(currNum);
+
+    }
+
+    
+
+    function showSlide(number) {
+
+        function hideSlides(){
+            offerSlides.forEach(item => {
+                item.classList.add('hide');
+                item.classList.remove('show', 'fade');
+            });
+        }
+        hideSlides();
+        offerSlides[number - 1].classList.add('show', 'fade');
+        offerSlides[number - 1].classList.remove('hide');
+    }
+
+    formCounter(currentNum);
+    sliderNext.addEventListener('click', () => {
+
+        if (currentNum + 1 > totalNumber) {
+            currentNum = 1;
+            formCounter(currentNum);
+        } else {
+            currentNum++;
+            formCounter(currentNum);
+        }
+
+        showSlide(currentNum);
+    });
+    
+    sliderPrev.addEventListener('click', () => {
+
+        if (currentNum - 1 <= 0) {
+            currentNum = totalNumber;
+            formCounter(currentNum);
+        } else {
+            currentNum--;
+            formCounter(currentNum);
+        }
+
+        showSlide(currentNum);
+    });
+
+    
     });
