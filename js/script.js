@@ -325,70 +325,133 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Slider
 
-    const offerSlider = document.querySelector('.offer__slider'),
-          offerSlides = offerSlider.querySelectorAll('.offer__slide'),
-          sliderPrev = offerSlider.querySelector('.offer__slider-prev'),
-          sliderNext = offerSlider.querySelector('.offer__slider-next'),
-          current = document.getElementById('current'),
-          total = document.getElementById('total'),
-          totalNumber = offerSlides.length;
+    const slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+          offerSlides = slidesWrapper.querySelectorAll('.offer__slide'),
+          prev = document.querySelector('.offer__slider-prev'),
+          next = document.querySelector('.offer__slider-next'),
+          current = document.querySelector('#current'),
+          total = document.querySelector('#total'),
+          slidesField = document.querySelector('.offer__slider-inner'),
+          width = window.getComputedStyle(slidesWrapper).width;
     
-    let currentNum = 1;
+    let currentNum = 1,
+        offset = 0;
 
-    function formCounter(currNum) {
-
-        function checkNumber(num) {
-            if (num < 10) {
-                return `0${num}`;
-            } else {return num;}
-        }
-
-        total.innerHTML = checkNumber(offerSlides.length);
-        current.innerHTML = checkNumber(currNum);
-
+    if (offerSlides.length < 10) {
+        total.textContent = `0${offerSlides.length}`;
+        current.textContent = `0${currentNum}`;
+    } else {
+        total.textContent = offerSlides;
+        current.textContent = `currentNum`;
     }
 
+    slidesField.style.width = 100 * offerSlides.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
+
+    slidesWrapper.style.overflow = 'hidden';
     
+    offerSlides.forEach(slide => {
+        slide.style.width = width;
+    });
 
-    function showSlide(number) {
+    next.addEventListener('click', () => {
 
-        function hideSlides(){
-            offerSlides.forEach(item => {
-                item.classList.add('hide');
-                item.classList.remove('show', 'fade');
-            });
+        if (offset == +width.slice(0, width.length - 2) * (offerSlides.length - 1)) {
+            offset = 0;
+        } else {
+            offset += +width.slice(0, width.length - 2);
         }
-        hideSlides();
-        offerSlides[number - 1].classList.add('show', 'fade');
-        offerSlides[number - 1].classList.remove('hide');
-    }
 
-    formCounter(currentNum);
-    sliderNext.addEventListener('click', () => {
-
-        if (currentNum + 1 > totalNumber) {
+        slidesField.style.transform = `translateX(-${offset}px)`;
+        
+        if (currentNum  == offerSlides.length) {
             currentNum = 1;
-            formCounter(currentNum);
         } else {
             currentNum++;
-            formCounter(currentNum);
         }
 
-        showSlide(currentNum);
+        if (offerSlides.length < 10) {
+            current.textContent = `0${currentNum}`;
+        } else {
+            current.textContent = offerSlides;
+        }
     });
-    
-    sliderPrev.addEventListener('click', () => {
 
-        if (currentNum - 1 <= 0) {
-            currentNum = totalNumber;
-            formCounter(currentNum);
+    prev.addEventListener('click', () => {
+        if (offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (offerSlides.length - 1);
+        } else {
+            offset -= +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (currentNum  == 1) {
+            currentNum = offerSlides.length;
         } else {
             currentNum--;
-            formCounter(currentNum);
         }
 
-        showSlide(currentNum);
+        if (offerSlides.length < 10) {
+            current.textContent = `0${currentNum}`;
+        } else {
+            current.textContent = offerSlides;
+        }
     });
+    // function formCounter(currNum) {
+
+    //     function checkNumber(num) {
+    //         if (num < 10) {
+    //             return `0${num}`;
+    //         } else {return num;}
+    //     }
+
+    //     total.innerHTML = checkNumber(offerSlides.length);
+    //     current.innerHTML = checkNumber(currNum);
+
+    // }
+
+    // formCounter(currentNum);
+
+    // function showSlide(number) {
+
+    //     function hideSlides(){
+    //         offerSlides.forEach(item => {
+    //             item.classList.add('hide');
+    //             item.classList.remove('show', 'fade');
+    //         });
+    //     }
+    //     hideSlides();
+    //     offerSlides[number - 1].classList.add('show', 'fade');
+    //     offerSlides[number - 1].classList.remove('hide');
+    // }
+
+    // sliderNext.addEventListener('click', () => {
+
+    //     if (currentNum + 1 > totalNumber) {
+    //         currentNum = 1;
+    //         formCounter(currentNum);
+    //     } else {
+    //         currentNum++;
+    //         formCounter(currentNum);
+    //     }
+
+    //     showSlide(currentNum);
+    // });
+    
+    // sliderPrev.addEventListener('click', () => {
+
+    //     if (currentNum - 1 <= 0) {
+    //         currentNum = totalNumber;
+    //         formCounter(currentNum);
+    //     } else {
+    //         currentNum--;
+    //         formCounter(currentNum);
+    //     }
+
+    //     showSlide(currentNum);
+    // });
 
     
     });
